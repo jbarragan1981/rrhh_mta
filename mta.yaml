@@ -1,81 +1,81 @@
-_schema-version: "3.2"
+_schema-version: '3.2'
 ID: proj_final
 version: 0.0.1
 modules:
-- name: proj-final-approuter
-  type: approuter.nodejs
-  path: proj-final-approuter
-  requires:
-  - name: proj_final_html_repo_runtime
-  - name: uaa_proj_final
-  - name: proj_final-dest-srv
-    group: destinations
-    properties:
-      forwardAuthToken: false
-      name: ui5
-      url: https://ui5.sap.com
-  parameters:
-    disk-quota: 256M
-    memory: 256M
-- name: proj_final_ui_deployer
-  type: com.sap.application.content
-  path: .
-  requires:
-  - name: proj_final_html_repo_host
-    parameters:
-      content-target: true
-  build-parameters:
-    build-result: resources
+  - name: proj-final-approuter
+    type: approuter.nodejs
+    path: proj-final-approuter
     requires:
-    - artifacts:
-      - rrhhrrhh.zip
-      name: rrhhrrhh
-      target-path: resources/
-- name: rrhhrrhh
-  type: html5
-  path: rrhh
-  build-parameters:
-    build-result: dist
-    builder: custom
-    commands:
-    - npm install
-    - npm run build:cf
-    supported-platforms: []
+      - name: proj_final_html_repo_runtime
+      - name: uaa_proj_final
+      - name: proj_final-dest-srv
+        group: destinations
+        properties:
+          forwardAuthToken: false
+          name: ui5
+          url: 'https://ui5.sap.com'
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+  - name: proj_final_ui_deployer
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: proj_final_html_repo_host
+        parameters:
+          content-target: true
+    build-parameters:
+      build-result: resources
+      requires:
+        - artifacts:
+            - rrhhrrhh.zip
+          name: rrhhrrhh
+          target-path: resources/
+  - name: rrhhrrhh
+    type: html5
+    path: rrhh
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm install
+        - 'npm run build:cf'
+      supported-platforms: []
 resources:
-- name: proj_final_html_repo_runtime
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: html5-apps-repo
-    service-plan: app-runtime
-- name: uaa_proj_final
-  type: org.cloudfoundry.managed-service
-  parameters:
-    path: ./xs-security.json
-    service: xsuaa
-    service-name: proj_final-xsuaa-service
-    service-plan: application
-- name: proj_final_html_repo_host
-  type: org.cloudfoundry.managed-service
-  parameters:
-    service: html5-apps-repo
-    service-plan: app-host
-- name: proj_final-dest-srv
-  type: org.cloudfoundry.managed-service
-  parameters:
-    config:
-      HTML5Runtime_enabled: false
-      init_data:
-        instance:
-          destinations:
-          - Authentication: NoAuthentication
-            Name: ui5
-            ProxyType: Internet
-            Type: HTTP
-            URL: https://ui5.sap.com
-          existing_destinations_policy: update
-      version: 1.0.0
-    service: destination
-    service-name: proj_final-dest-srv
-    service-plan: lite
+  - name: proj_final_html_repo_runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+  - name: uaa_proj_final
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-name: proj_final-xsuaa-service
+      service-plan: application
+  - name: proj_final_html_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+  - name: proj_final-dest-srv
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: false
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: 'https://ui5.sap.com'
+            existing_destinations_policy: update
+        version: 1.0.0
+      service: destination
+      service-name: proj_final-dest-srv
+      service-plan: lite
 parameters:
   deploy_mode: html5-repo
